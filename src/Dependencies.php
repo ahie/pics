@@ -18,6 +18,7 @@ $injector->share('Symfony\Component\HttpFoundation\Response');
 $injector->alias('Pics\Template\Renderer', '\Pics\Template\MustacheRenderer');
 $injector->define('Mustache_Engine',
 [ ':options' => [
+	'cache' => '/tmp/cache/mustache',
 	'loader' => new Mustache_Loader_FilesystemLoader(dirname(__DIR__) . '/templates', [
 		'extension' => '.html'
 	])
