@@ -1,0 +1,19 @@
+{
+    "name": "pics",
+    "description": "Your project description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksi Hietanen",
+            "email": "aleksi.hietanen@student.tut.fi"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pics\\": "src/"
+        }
+    }
+}
