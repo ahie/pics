@@ -2,9 +2,12 @@
 
 namespace Pics;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 require __DIR__ . '/../vendor/autoload.php';
 
-error_reporting(0);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 $environment = 'development';
 
@@ -43,6 +46,7 @@ switch ($routeInfo[0]) {
 	$response->setContent('405');
 	$response->headers->set('Content-Type', 'text/plain');
 	$response->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
+	$response->send();
         break;
     case \FastRoute\Dispatcher::FOUND:
         $className = $routeInfo[1][0];

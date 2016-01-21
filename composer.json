@@ -8,13 +8,23 @@
             "email": "aleksi.hietanen@student.tut.fi"
         }
     ],
+    "repositories": [
+        {
+            "type": "pear",
+            "url": "http://pear.php.net"
+        }
+    ],
     "require": {
         "php": ">=5.5.0",
 	"filp/whoops": "2.*",
         "rdlowrey/auryn": "^1.1",
+        "mustache/mustache": "^2.9",
         "nikic/fast-route": "^0.7.0",
         "symfony/http-foundation": "^3.0",
-        "mustache/mustache": "^2.9"
+	"pear-pear.php.net/mail_mime" : "*",
+	"pear-pear.php.net/http_request2" : "*",
+	"pear-pear.php.net/mail_mimedecode" : "*",
+	"microsoft/windowsazure": "*"
     },
     "autoload": {
         "psr-4": {
