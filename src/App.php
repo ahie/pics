@@ -12,7 +12,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 $environment = 'development';
 
 $whoops = new \Whoops\Run;
-if ($environment !== 'production') {
+if ($config['environment'] !== 'production') {
 	$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
 	$whoops->pushHandler(function($e){
