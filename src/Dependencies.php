@@ -37,7 +37,8 @@ $injector->alias('Pics\Repositories\PicRepositoryInterface', 'Pics\Repositories\
 $injector->share('Pics\Storage\AzureFileStorage');
 $injector->define('Pics\Storage\AzureFileStorage', [
 	':connectionString' => $config['azureConnString'], 
-	':container' => $config['azureBlobContainer']
+	':container' => $config['azureBlobContainer'],
+	':url' => $config['azureBlobUrl']
 ]);
 $injector->alias('Pics\Storage\FileStorageInterface', 'Pics\Storage\AzureFileStorage');
 

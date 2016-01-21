@@ -47,7 +47,11 @@ class Upload
 			return;
 		}
 
-		$picid = $this->repository->save();
+		$pic = new \Pics\Models\Picture;
+		$pic->filesize = $file->getSize();
+		$pic->url = $this->fileStorage->getUrl();
+
+		$picid = $this->repository->save($pic);
 		$this->fileStorage->store($file, $picid);
 
 		$this->response->headers->set('Location', '/' . $picid);

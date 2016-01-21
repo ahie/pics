@@ -2,6 +2,8 @@
 
 namespace Pics\Repositories;
 
+use Pics\Models\Picture;
+
 class PSQLPicRepository implements PicRepositoryInterface
 {
 
@@ -12,12 +14,12 @@ class PSQLPicRepository implements PicRepositoryInterface
 	}
 
         public function find($params) {
-		$id = base_convert($id, 36, 10);
+		$id = base_convert($params['id'], 36, 10);
 		$stmt = $this->pdo->prepare('
 			SELECT *
 			FROM Picture
 			WHERE :id = id');
-		$stmt->bindParam(':id', $params['id']);
+		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Picture');
 		$pic = $stmt->fetch();
@@ -29,11 +31,13 @@ class PSQLPicRepository implements PicRepositoryInterface
 		return $pic;
 	}
 
-        public function save(Picture $pic = null) {
+        public function save(Picture $pic) {
 		$stmt = $this->pdo->prepare('
-			INSERT INTO Picture (ownedby)
-			VALUES (:ownedby)
+			INSERT INTO Picture (url, filesize, ownedby)
+			VALUES (:url, :filesize, :ownedby)
 			RETURNING id');
+		$stmt->bindParam(':url', $pic->url);
+		$stmt->bindParam(':filesize', $pic->filesize);
 		$stmt->bindParam(':ownedby', $pic->ownedby);
 		$stmt->execute();
 

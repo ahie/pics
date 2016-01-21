@@ -2,6 +2,8 @@
 
 namespace Pics\Repositories;
 
+use Pics\Models\Picture;
+
 interface PicRepositoryInterface
 {
 	public function find($id);
