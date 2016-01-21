@@ -16,8 +16,8 @@ $injector->share('Symfony\Component\HttpFoundation\Response');
 
 // Templating engine
 $injector->alias('Pics\Template\Renderer', 'Pics\Template\MustacheRenderer');
-$injector->define('Mustache_Engine',
-[ ':options' => [
+$injector->define('Mustache_Engine',[ 
+':options' => [
 	'cache' => '/tmp/cache/mustache',
 	'loader' => new Mustache_Loader_FilesystemLoader(dirname(__DIR__) . '/templates', [
 		'extension' => '.html'
@@ -35,7 +35,10 @@ $injector->alias('Pics\Repositories\PicRepositoryInterface', 'Pics\Repositories\
 
 // File storage
 $injector->share('Pics\Storage\AzureFileStorage');
-$injector->define('Pics\Storage\AzureFileStorage', [':connectionString' => $config['azureConnString']]);
+$injector->define('Pics\Storage\AzureFileStorage', [
+	':connectionString' => $config['azureConnString'], 
+	':container' => $config['azureBlobContainer']
+]);
 $injector->alias('Pics\Storage\FileStorageInterface', 'Pics\Storage\AzureFileStorage');
 
 return $injector;

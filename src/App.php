@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ERROR | E_PARSE);
 
 $environment = 'development';
 

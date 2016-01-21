@@ -4,5 +4,5 @@ namespace Pics\Storage;
 
 interface FileStorageInterface
 {
-	public function store(File $file, $id);
+	public function store($file, $id);
 }

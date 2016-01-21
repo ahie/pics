@@ -10,6 +10,7 @@ $config = array(
         	'password' => 'keyboardcat'
 	),
 
-	'azureConnString' => '+PBZCE/lUwrxN8wUs2IK2zsGwKPSZsjAP99pIhIyCn8YfjbsTABx7NADa5owXiiMk1fCg/QJwiQFDzYM0g+DGw=='
+	'azureConnString' => 'DefaultEndpointsProtocol=http;AccountName=picss;AccountKey=9oGzUNHj+AYCOTobnguwjVIoYidTNsGvpfZAkcDIqkFCgCoBsCLJ1NqZdNwfgFLE99ZxlXKxX1GUDE0hmHfSpQ==',
+	'azureBlobContainer' => 'pics'
 
 );

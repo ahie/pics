@@ -11,18 +11,29 @@ class PSQLPicRepository implements PicRepositoryInterface
 		$this->pdo = $pdo;
 	}
 
-        public function find($id) {
+        public function find($params) {
 		$id = base_convert($id, 36, 10);
-		/*
-		...
-		*/
+		$stmt = $this->pdo->prepare('
+			SELECT *
+			FROM Picture
+			WHERE :id = id');
+		$stmt->bindParam(':id', $params['id']);
+		$stmt->execute();
+		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Picture');
+		$pic = $stmt->fetch();
+
+		if(!isset($pic->ownedby)) {
+			$pic->ownedby = 'Anonymous';
+		}
+		
+		return $pic;
 	}
 
         public function save(Picture $pic = null) {
 		$stmt = $this->pdo->prepare('
-				INSERT INTO Picture (ownedby)
-				VALUES (:ownedby)
-				RETURNING id');
+			INSERT INTO Picture (ownedby)
+			VALUES (:ownedby)
+			RETURNING id');
 		$stmt->bindParam(':ownedby', $pic->ownedby);
 		$stmt->execute();
 

@@ -2,21 +2,33 @@
 
 namespace Pics\Controllers;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Pics\Template\Renderer;
 use Pics\Repositories\PicRepositoryInterface;
 use Pics\Storage\FileStorageInterface;
 
-class Upload extends BaseController
+class Upload
 {
 
+        private $request;
+        private $response;
+        private $renderer;
 	private $repository;
 	private $fileStorage;
 
 	const mimeRegex = '/^image\//';
 
 	public function __construct(
+                Request $request,
+                Response $response,
+                Renderer $renderer,
 		PicRepositoryInterface $repository,
 		FileStorageInterface $fileStorage) {
 
+                $this->request = $request;
+                $this->response = $response;
+                $this->renderer = $renderer;
 		$this->repository = $repository;
 		$this->fileStorage = $fileStorage;
 
@@ -28,15 +40,18 @@ class Upload extends BaseController
 
 		if(!$file->isValid()) {
 			echo 'error: ' . $file->getError();
+			return;
 		}
 		if(!preg_match(self::mimeRegex, $file->getMimeType())) {
 			echo 'wrong filetype.';
+			return;
 		}
 
 		$picid = $this->repository->save();
 		$this->fileStorage->store($file, $picid);
 
-		echo 'done';
+		$this->response->headers->set('Location', '/' . $picid);
+		$this->response->send();
 
 	}
 }

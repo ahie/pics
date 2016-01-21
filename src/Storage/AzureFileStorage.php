@@ -10,17 +10,18 @@ class AzureFileStorage implements FileStorageInterface
 {
 
 	private $blobRestProxy;
+	private $container;
 
-	public function __construct($connectionString) {
+	public function __construct($connectionString, $container) {
 		$this->blobRestProxy = ServicesBuilder::getInstance()
 					->createBlobService($connectionString);
+		$this->container = $container;
 	}
 
-	public function store(File $file, $id) {
+	public function store($file, $id) {
 		$content = fopen($file->getRealPath(), 'r');
-		$blobName = $id;
 		$blobOpts = new CreateBlobOptions;
 		$blobOpts->setContentType($file->getMimeType());
-		$blobRestProxy->createBlockBlob("pics", $blob_name, $content, $blob_opts);
+		$this->blobRestProxy->createBlockBlob($this->container, $id, $content, $blobOpts);
 	}
 }
