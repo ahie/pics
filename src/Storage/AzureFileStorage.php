@@ -24,6 +24,7 @@ class AzureFileStorage implements FileStorageInterface
 		$content = fopen($file->getRealPath(), 'r');
 		$blobOpts = new CreateBlobOptions;
 		$blobOpts->setContentType($file->getMimeType());
+		$blobOpts->setCacheControl('max-age=315360000');
 		$this->blobRestProxy->createBlockBlob($this->container, $id, $content, $blobOpts);
 	}
 

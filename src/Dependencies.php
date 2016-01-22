@@ -29,17 +29,21 @@ $injector->share('PDO');
 $injector->define('PDO', [
 	':dsn' => $config['database']['dsn'],
 	':username' => $config['database']['username'],
-	':password' => $config['database']['password']
+	':password' => $config['database']['password'],
+	':options' => array(\PDO::ATTR_PERSISTENT => true)
 ]);
 $injector->alias('Pics\Repositories\PicRepositoryInterface', 'Pics\Repositories\PSQLPicRepository');
 $injector->alias('Pics\Repositories\CommentRepositoryInterface', 'Pics\Repositories\PSQLCommentRepository');
+
+// Memcached
+$injector->share('Memcached');
 
 // File storage
 $injector->share('Pics\Storage\AzureFileStorage');
 $injector->define('Pics\Storage\AzureFileStorage', [
 	':connectionString' => $config['azureConnString'], 
 	':container' => $config['azureBlobContainer'],
-	':url' => $config['azureBlobUrl']
+	':url' => $config['azureCDNUrl']
 ]);
 $injector->alias('Pics\Storage\FileStorageInterface', 'Pics\Storage\AzureFileStorage');
 

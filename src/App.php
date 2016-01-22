@@ -11,11 +11,13 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 // Dependency injection
 $injector = include('Dependencies.php');
-$pdo = $injector->make('PDO');
-$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 $request = $injector->make('Symfony\Component\HttpFoundation\Request');
 $response = $injector->make('Symfony\Component\HttpFoundation\Response');
 $renderer = $injector->make('Pics\Template\Renderer');
+$pdo = $injector->make('PDO');
+$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+$m = $injector->make('Memcached');
+$m->addServer('127.0.0.1', 11211);
 
 // Error handler
 if ($config['environment'] !== 'production') {

@@ -8,12 +8,19 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 {
 
 	private $pdo;
+	private $m;
 
-	public function __construct(\PDO $pdo) {
+	public function __construct(\PDO $pdo, \Memcached $m) {
 		$this->pdo = $pdo;
+		$this->m = $m;
 	}
 
         public function find($id) {
+		$comment = $this->m->get('comment' . $id);
+		if(!!$comment) {
+			return $comment;
+		}
+
 		$stmt = $this->pdo->prepare('
 			SELECT	id, content,
 				picture, parent,
@@ -25,10 +32,17 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 		$stmt->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Comment');
 		$comment = $stmt->fetch();
+
+		$this->m->set('comment' . $id, $comment, 60);
 		return $comment;
 	}
 
 	public function fetchAllCommentsForPic($id) {
+		$comments = $this->m->get('cfp' . $id);
+		if(!!$comments) {
+			return $comments;
+		}
+
 		$stmt = $this->pdo->prepare('
 			SELECT	id, content,
 				picture, parent,
@@ -40,6 +54,8 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 		$stmt->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Comment');
 		$comments = $stmt->fetchAll();
+
+		$this->m->set('cfp' . $id, $comments, 60);
 		return $comments;
 	}
 

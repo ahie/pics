@@ -2,3 +2,7 @@
     Send this file: <input name="userfile" type="file" />
     <input type="submit" value="Send File" />
 </form>
+<p>Newest "sweet pics":</p>
+{{#pics}}
+<a href="//pics.cloudapp.net/{{id}}"><img src="{{url}}{{id}}"></a>
+{{/pics}}
