@@ -13,21 +13,17 @@ class PSQLPicRepository implements PicRepositoryInterface
 		$this->pdo = $pdo;
 	}
 
-        public function find($params) {
-		$id = base_convert($params['id'], 36, 10);
+        public function find($id) {
 		$stmt = $this->pdo->prepare('
-			SELECT *
+			SELECT 	id, uploaded, url,
+				filesize,
+				COALESCE(ownedby, \'Anonymous\') AS ownedby
 			FROM Picture
 			WHERE :id = id');
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Picture');
 		$pic = $stmt->fetch();
-
-		if(!isset($pic->ownedby)) {
-			$pic->ownedby = 'Anonymous';
-		}
-		
 		return $pic;
 	}
 
@@ -42,7 +38,7 @@ class PSQLPicRepository implements PicRepositoryInterface
 		$stmt->execute();
 
 		$id = $stmt->fetch(\PDO::FETCH_ASSOC)['id'];
-		return base_convert($id, 10, 36);
+		return $id;
 	}
 
         public function remove(Picture $pic) {

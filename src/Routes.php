@@ -3,5 +3,7 @@
 return [
 	['GET', '/', ['Pics\Controllers\Homepage', 'show']],
 	['GET', '/{id}', ['Pics\Controllers\Picture', 'show']],
-	['POST', '/upload', ['Pics\Controllers\Upload', 'upload']]
+	['POST', '/upload', ['Pics\Controllers\Upload', 'upload']],
+	['POST', '/comment/{pid}', ['Pics\Controllers\Comment', 'comment']],
+	['POST', '/reply/{cid}', ['Pics\Controllers\Comment', 'reply']]
 ];

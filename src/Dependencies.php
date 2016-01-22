@@ -32,6 +32,7 @@ $injector->define('PDO', [
 	':password' => $config['database']['password']
 ]);
 $injector->alias('Pics\Repositories\PicRepositoryInterface', 'Pics\Repositories\PSQLPicRepository');
+$injector->alias('Pics\Repositories\CommentRepositoryInterface', 'Pics\Repositories\PSQLCommentRepository');
 
 // File storage
 $injector->share('Pics\Storage\AzureFileStorage');

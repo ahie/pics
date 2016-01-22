@@ -39,11 +39,19 @@ class Upload
 		$file = $this->request->files->get('userfile');
 
 		if(!$file->isValid()) {
-			echo 'error: ' . $file->getError();
+			$error = array('code' => 400, 'message' => $file->getError());
+			$html = $this->renderer->render('Error', $error);
+			$this->response->setContent($html);
+			$this->response->setStatusCode(Response::HTTP_BAD_REQUEST);
+			$this->response->send();
 			return;
 		}
 		if(!preg_match(self::mimeRegex, $file->getMimeType())) {
-			echo 'wrong filetype.';
+			$error = array('code' => 400, 'message' => 'File must be an image.');
+			$html = $this->renderer->render('Error', $error);
+			$this->response->setContent($html);
+			$this->response->setStatusCode(Response::HTTP_BAD_REQUEST);
+			$this->response->send();
 			return;
 		}
 
