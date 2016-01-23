@@ -8,12 +8,9 @@ use Pics\Template\Renderer;
 use Pics\Repositories\PicRepositoryInterface;
 use Pics\Storage\FileStorageInterface;
 
-class Upload
+class Upload extends BaseController
 {
 
-        private $request;
-        private $response;
-        private $renderer;
 	private $repository;
 	private $fileStorage;
 
@@ -26,9 +23,7 @@ class Upload
 		PicRepositoryInterface $repository,
 		FileStorageInterface $fileStorage) {
 
-                $this->request = $request;
-                $this->response = $response;
-                $this->renderer = $renderer;
+		parent::__construct($request, $response, $renderer);
 		$this->repository = $repository;
 		$this->fileStorage = $fileStorage;
 
@@ -38,20 +33,16 @@ class Upload
 
 		$file = $this->request->files->get('userfile');
 
+		if(!$file) {
+			$this->errorResponse(400, 'No file uploaded');
+			return;
+		}
 		if(!$file->isValid()) {
-			$error = array('code' => 400, 'message' => $file->getError());
-			$html = $this->renderer->render('Error', $error);
-			$this->response->setContent($html);
-			$this->response->setStatusCode(Response::HTTP_BAD_REQUEST);
-			$this->response->send();
+			$this->errorResponse(400, 'Not uploaded successfully');
 			return;
 		}
 		if(!preg_match(self::mimeRegex, $file->getMimeType())) {
-			$error = array('code' => 400, 'message' => 'File must be an image.');
-			$html = $this->renderer->render('Error', $error);
-			$this->response->setContent($html);
-			$this->response->setStatusCode(Response::HTTP_BAD_REQUEST);
-			$this->response->send();
+			$this->errorResponse(400, 'File must be an image');
 			return;
 		}
 
@@ -60,10 +51,21 @@ class Upload
 		$pic->url = $this->fileStorage->getUrl();
 
 		$picid = $this->repository->save($pic);
-		$this->fileStorage->store($file, $picid);
+
+		if(!$picid) {
+			$this->errorResponse(500, 'Failed to add picture');
+			return;
+		}
+
+		$err = $this->fileStorage->store($file, $picid);
+
+		if(isset($err)) {
+			$this->repository->remove($picid);
+			$this->errorResponse(500, 'Failed to store picture');
+		}
 
 		$this->response->headers->set('Location', '/' . $picid);
 		$this->response->send();
-
 	}
+
 }

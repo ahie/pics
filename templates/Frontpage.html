@@ -1,8 +1,14 @@
-<form enctype="multipart/form-data" action="/upload" method="POST">
-    Send this file: <input name="userfile" type="file" />
-    <input type="submit" value="Send File" />
+<form class ="navbar-form" enctype="multipart/form-data" action="/upload" method="POST">
+<input name="userfile" type="file" />
+<input type="submit" value="Upload" />
 </form>
-<p>Newest "sweet pics":</p>
-{{#pics}}
-<a href="//pics.cloudapp.net/{{id}}"><img src="{{url}}{{id}}"></a>
-{{/pics}}
+
+<div class="image-container" style="width:720px">
+	{{#pics}}
+	<div class="image-div" style="float:left">
+		<a href="//pics.cloudapp.net/{{id}}">
+			<img class="img-responsive img-thumbnail" src="{{url}}{{id}}.t">
+		</a>
+	</div>
+	{{/pics}}
+</div>

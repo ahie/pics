@@ -7,12 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Pics\Template\Renderer;
 use Pics\Repositories\CommentRepositoryInterface;
 
-class Comment
+class Comment extends BaseController
 {
 
-        private $request;
-        private $response;
-        private $renderer;
 	private $repository;
 
 	public function __construct(
@@ -21,9 +18,7 @@ class Comment
                 Renderer $renderer,
 		CommentRepositoryInterface $repository) {
 
-                $this->request = $request;
-                $this->response = $response;
-                $this->renderer = $renderer;
+                parent::__construct($request, $response, $renderer);
 		$this->repository = $repository;
 
 	}
@@ -32,8 +27,8 @@ class Comment
 		$pictureId = $params['pid'];
 		$content = $this->request->get('text');
 
-                if($content === '') {
-                        $this->badRequest();
+                if($content === '' || strlen($content) > 15000) {
+                        $this->errorResponse(400, 'Comment too long/empty');
                         return;
                 }
 
@@ -50,9 +45,13 @@ class Comment
 		$parentComment = $this->repository->find($parentCommentId);
 		$content = $this->request->get('text');
 
-		if($content === '' || !$parentComment) {
-			$this->badRequest();
+		if($content === '' || strlen($content) > 15000) {
+			$this->errorResponse(400, 'Comment too long/empty');
 			return;
+		}
+
+		if(!$parentComment) {
+			$this->errorResponse(400, 'Not a reply to any existing comment');
 		}
 
 		$comment = new \Pics\Models\Comment;
@@ -76,16 +75,4 @@ class Comment
 		}
 	}
 
-	private function badRequest() {
-                if($this->request->isXmlHttpRequest()) {
-                        $this->response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                        $this->response->send();
-                } else {
-			$error = array('code' => 400, 'message' => 'Can\'t leave an empty comment!');
-			$html = $this->renderer->render('Error', $error);
-                        $this->response->setStatusCode(Response::HTTP_BAD_REQUEST);
-			$this->response->setContent($html);
-                        $this->response->send();
-                }
-	}
 }

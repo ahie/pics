@@ -8,11 +8,9 @@ use Pics\Template\Renderer;
 use Pics\Repositories\PicRepositoryInterface;
 use Pics\Repositories\CommentRepositoryInterface;
 
-class Picture
+class Picture extends BaseController
 {
-        private $request;
-        private $response;
-        private $renderer;
+
         private $picRepository;
 	private $commRepository;
 
@@ -23,9 +21,7 @@ class Picture
                 PicRepositoryInterface $picRepository,
 		CommentRepositoryInterface $commRepository) {
 
-                $this->request = $request;
-                $this->response = $response;
-                $this->renderer = $renderer;
+                parent::__construct($request, $response, $renderer);
                 $this->picRepository = $picRepository;
 		$this->commRepository = $commRepository;
 
@@ -34,11 +30,7 @@ class Picture
 	public function show($params) {
 		$pic = $this->picRepository->find($params['id']);
 		if(!$pic) {
-			$data = array('code' => 404, 'message' => 'Image not found!');
-			$html = $this->renderer->render('Error', $data);
-			$this->response->setStatusCode(Response::HTTP_NOT_FOUND);
-			$this->response->setContent($html);
-			$this->response->send();
+			$this->errorResponse(404, 'Image not found!');
 			return;
 		}
 		$comments = $this->commRepository->fetchAllCommentsForPic($params['id']);

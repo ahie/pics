@@ -49,7 +49,7 @@ class PSQLPicRepository implements PicRepositoryInterface
 				COALESCE(ownedby, \'Anonymous\') AS ownedby
 			FROM Picture
 			ORDER BY uploaded DESC
-			LIMIT 10');
+			LIMIT 16');
 		$stmt->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Picture');
 		$pics = $stmt->fetchAll();

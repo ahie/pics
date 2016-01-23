@@ -2,9 +2,9 @@
 <p>By {{pic.ownedby}}</p>
 <img src="{{pic.url}}{{pic.id}}">
 <form method="post" action="/comment/{{pic.id}}" id="hehe">
-<textarea name="text" rows="6" cols="60"></textarea>
+<textarea name="text" maxlength="15000" rows="6" cols="60"></textarea>
 <input type="submit" value="add comment">
 </form>
 {{#comments}}
-<p>{{posted}} {{byuser}}: {{content}}</p>
+<pre>{{posted}} {{byuser}}: {{content}}</pre>
 {{/comments}}

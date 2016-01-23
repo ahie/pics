@@ -7,11 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Pics\Template\Renderer;
 use Pics\Repositories\PicRepositoryInterface;
 
-class Frontpage
+class Frontpage extends BaseController
 {
-        private $request;
-        private $response;
-        private $renderer;
 	private $repository;
 
         public function __construct(
@@ -20,9 +17,7 @@ class Frontpage
                 Renderer $renderer,
 		PicRepositoryInterface $repository) {
 
-                $this->request = $request;
-                $this->response = $response;
-                $this->renderer = $renderer;
+                parent::__construct($request, $response, $renderer);
 		$this->repository = $repository;
 
         }
