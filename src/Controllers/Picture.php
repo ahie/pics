@@ -40,4 +40,21 @@ class Picture extends BaseController
 		$this->response->send();
 	}
 
+	public function nextPics($params) {
+
+		if(!is_numeric($params['num'])) {
+			$this->errorResponse(400);
+		}
+
+		$num = intval($params['num']);
+		if($num > 200) {
+			$this->errorResponse(400);
+		}
+
+		$pics = $this->picRepository->fetchBefore($params['pid'], $num);
+		$this->response->setContent(json_encode($pics));
+		$this->response->send();
+
+	}
+
 }

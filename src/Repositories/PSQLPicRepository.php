@@ -58,6 +58,31 @@ class PSQLPicRepository implements PicRepositoryInterface
 		return $pics;
 	}
 
+	public function fetchBefore($pid, $num) {
+
+		$pics = $this->m->get('b.' . $pid . '.' . $num);
+		if(!!$pics) {
+			return $pics;
+		}
+
+		$stmt = $this->pdo->prepare('
+                        SELECT  id, uploaded, url,
+                                filesize,
+                                COALESCE(ownedby, \'Anonymous\') AS ownedby
+                        FROM Picture
+			WHERE uploaded < (SELECT uploaded FROM Picture WHERE :id = id)
+                        ORDER BY uploaded DESC
+                        LIMIT :num');
+		$stmt->bindParam(':id', $pid);
+		$stmt->bindParam(':num', $num);
+                $stmt->execute();
+                $stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Picture');
+                $pics = $stmt->fetchAll();
+
+		$this->m->set('b.' . $pid . '.' . $num, $pics, 60);
+		return $pics;
+	}
+
         public function save(Picture $pic) {
 		$stmt = $this->pdo->prepare('
 			INSERT INTO Picture (url, filesize, ownedby)
@@ -73,7 +98,9 @@ class PSQLPicRepository implements PicRepositoryInterface
 	}
 
         public function remove(Picture $pic) {
-
+		$stmt = $this->pdo->prepare('DELETE FROM Picture WHERE :id = id');
+		$stmt->bindParam(':id', $pic->id);
+		$stmt->execute();
 	}
 
 }

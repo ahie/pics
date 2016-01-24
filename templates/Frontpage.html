@@ -1,14 +1,69 @@
-<form class ="navbar-form" enctype="multipart/form-data" action="/upload" method="POST">
-<input name="userfile" type="file" />
-<input type="submit" value="Upload" />
-</form>
+<div style="width:768px; margin-left:auto; margin-right:auto; background-color:#ff6600">
+	<form enctype="multipart/form-data" action="/upload" method="POST" style="margin-bottom:0px">
+		<input type="submit" value="upload" disabled id="filesubmit" />
+		<input name="userfile" type="file" accept="image/*" id="fileinput" />
+	</form>
+</div>
 
-<div class="image-container" style="width:720px">
+<div id="pic-container" style="width:728px; height:auto; margin-left:auto; margin-right:auto;
+background-color:#f6f6ef; padding:20px; overflow:hidden;">
 	{{#pics}}
-	<div class="image-div" style="float:left">
+	<div id="{{id}}" style="float:left; margin:1px">
 		<a href="//pics.cloudapp.net/{{id}}">
 			<img class="img-responsive img-thumbnail" src="{{url}}{{id}}.t">
 		</a>
 	</div>
 	{{/pics}}
 </div>
+
+<script type="text/javascript">
+(function() {
+
+var filesubmit = document.getElementById('filesubmit');
+var fileinput = document.getElementById('fileinput');
+
+function checkSubmit() {
+	if(fileinput.files.length !== 0)
+		filesubmit.disabled = false;
+}
+
+checkSubmit();
+fileinput.addEventListener('change', checkSubmit);
+
+var loading = false;
+window.onscroll = function(ev) {
+	if ((window.innerHeight + window.scrollY)
+	>= document.body.offsetHeight && !loading) {
+		
+		loading = true;
+		var divs = document.getElementById('pic-container').children;
+		var lastid = divs[divs.length - 1].id;
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', 'next16/' + lastid, true);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				appendPics(JSON.parse(xhr.response));
+			}
+			loading = false;
+		};
+		xhr.send();
+
+		function appendPics(pics) {
+			pics.forEach(function(pic) {
+				var node = document.createElement('DIV');
+				node.id = pic.id;
+				node.style.float = "left";
+				node.style.margin = "1px";
+				node.innerHTML = 
+				'<a href="//pics.cloudapp.net/' + pic.id + '">' +
+                        	'<img src="' + pic.url + pic.id + '.t">' +
+                		'</a>';
+				document.getElementById('pic-container').appendChild(node);
+			});
+		}
+
+	}
+};
+
+})();
+</script>
