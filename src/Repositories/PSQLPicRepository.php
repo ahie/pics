@@ -49,7 +49,7 @@ class PSQLPicRepository implements PicRepositoryInterface
 				COALESCE(ownedby, \'Anonymous\') AS ownedby
 			FROM Picture
 			ORDER BY uploaded DESC
-			LIMIT 16');
+			LIMIT 32');
 		$stmt->execute();
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Picture');
 		$pics = $stmt->fetchAll();
@@ -84,17 +84,22 @@ class PSQLPicRepository implements PicRepositoryInterface
 	}
 
         public function save(Picture $pic) {
-		$stmt = $this->pdo->prepare('
-			INSERT INTO Picture (url, filesize, ownedby)
-			VALUES (:url, :filesize, :ownedby)
-			RETURNING id');
-		$stmt->bindParam(':url', $pic->url);
-		$stmt->bindParam(':filesize', $pic->filesize);
-		$stmt->bindParam(':ownedby', $pic->ownedby);
-		$stmt->execute();
+		try {
+			$stmt = $this->pdo->prepare('
+				INSERT INTO Picture (url, filesize, ownedby)
+				VALUES (:url, :filesize, :ownedby)
+				RETURNING id');
+			$stmt->bindParam(':url', $pic->url);
+			$stmt->bindParam(':filesize', $pic->filesize);
+			$stmt->bindParam(':ownedby', $pic->ownedby);
+			$stmt->execute();
 
-		$id = $stmt->fetch(\PDO::FETCH_ASSOC)['id'];
-		return $id;
+			$id = $stmt->fetch(\PDO::FETCH_ASSOC)['id'];
+			return $id;
+		}
+		catch (\PDOException $e) {
+			return null;
+		}
 	}
 
         public function remove(Picture $pic) {

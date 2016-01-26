@@ -36,7 +36,7 @@ class AzureFileStorage implements FileStorageInterface
 			}
 			$this->blobRestProxy->createBlockBlob($this->container, $id . '.t', $img->getImagesBlob(), $blobOpts);
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			return $e;
 		}
 		return null;

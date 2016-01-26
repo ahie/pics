@@ -37,21 +37,25 @@ function(\FastRoute\RouteCollector $r) {
 $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPathInfo());
 switch ($routeInfo[0]) {
 	case \FastRoute\Dispatcher::NOT_FOUND:
-		$html = $renderer->render('Error', array(
-		'code' => 404,
-		'message' => 'Page not found :(')
-		);
-		$response->setStatusCode(Response::HTTP_NOT_FOUND);
+		if(!$request->isXmlHttpRequest()) {
+			$html = $renderer->render('Error', array(
+			'code' => 404,
+			'message' => 'Page not found :(')
+			);
+		}
 		$response->setContent($html);
+		$response->setStatusCode(Response::HTTP_NOT_FOUND);
 		$response->send();
 		break;
 	case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-		$html = $renderer->render('Error', array(
-		'code' => 405,
-		'message' => 'Method not allowed')
-		);
-		$response->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
+		if(!$request->isXmlHttpRequest()) {
+			$html = $renderer->render('Error', array(
+			'code' => 405,
+			'message' => 'Method not allowed')
+			);
+		}
 		$response->setContent($html);
+		$response->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
 		$response->send();
 		break;
 	case \FastRoute\Dispatcher::FOUND:

@@ -1,10 +1,22 @@
-<p>Uploaded {{pic.uploaded}}</p>
-<p>By {{pic.ownedby}}</p>
-<img src="{{pic.url}}{{pic.id}}">
-<form method="post" action="/comment/{{pic.id}}" id="hehe">
-<textarea name="text" maxlength="15000" rows="6" cols="60"></textarea>
-<input type="submit" value="add comment">
-</form>
-{{#comments}}
-<pre>{{posted}} {{byuser}}: {{content}}</pre>
-{{/comments}}
+{{>Header}}
+
+<div class="content">
+
+	<div class="picinfo">Uploaded {{pic.uploadTimePassed}} by {{pic.ownedby}}</div>
+
+	<img src="{{pic.url}}{{pic.id}}" class="pic">
+
+	<form method="post" action="/comment/{{pic.id}}" class="commentform">
+		<textarea name="text" maxlength="15000" rows="6" cols="60" id="textinput"></textarea>
+		<input type="submit" value="add comment" disabled id="commentsubmit">
+	</form>
+
+	{{#comments}}
+		<div class="commentinfo">{{byuser}} {{postedTimePassed}}:</div>
+		<pre class="comment">{{content}}</pre>
+	{{/comments}}
+
+</div>
+
+<script src="javascript/commentsubm.js"></script>
+

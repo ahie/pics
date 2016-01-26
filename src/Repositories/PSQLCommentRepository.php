@@ -70,6 +70,10 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 		$stmt->bindParam(':byuser', $comment->byuser);
 		$stmt->execute();
 
+		// Remove cached comments for this picture
+		// since they are no longer valid
+		$this->m->delete('cfp' . $comment->picture);
+
 		$id = $stmt->fetch(\PDO::FETCH_ASSOC)['id'];
 		return $id;
 	}

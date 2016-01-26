@@ -1,0 +1,49 @@
+.header {
+	width: 768px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #ff6600;
+}
+
+.content {
+	width: 728px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #f6f6ef;
+	padding: 20px;
+	overflow: hidden;
+}
+
+.tpic {
+	float: left;
+	margin: 1px;
+}
+
+.pic {
+	margin: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 100%;
+}
+
+.picinfo {
+	font-family: Verdana, Geneva, sans-serif;
+        font-size: 9pt;
+}
+
+.commentform {
+	display: block;
+}
+
+.commentinfo {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 8pt;
+	color: #828282;
+}
+
+.comment {
+	white-space: pre-wrap;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10pt;
+}

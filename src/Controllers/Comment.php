@@ -27,7 +27,7 @@ class Comment extends BaseController
 		$pictureId = $params['pid'];
 		$content = $this->request->get('text');
 
-                if($content === '' || strlen($content) > 15000) {
+                if(trim($content) === '' || strlen($content) > 15000) {
                         $this->errorResponse(400, 'Comment too long/empty');
                         return;
                 }
@@ -45,7 +45,7 @@ class Comment extends BaseController
 		$parentComment = $this->repository->find($parentCommentId);
 		$content = $this->request->get('text');
 
-		if($content === '' || strlen($content) > 15000) {
+		if(trim($content) === '' || strlen($content) > 15000) {
 			$this->errorResponse(400, 'Comment too long/empty');
 			return;
 		}

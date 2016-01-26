@@ -62,6 +62,7 @@ class Upload extends BaseController
 		if(isset($err)) {
 			$this->repository->remove($picid);
 			$this->errorResponse(500, 'Failed to store picture');
+			return;
 		}
 
 		$this->response->headers->set('Location', '/' . $picid);
