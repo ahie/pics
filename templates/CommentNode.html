@@ -1,0 +1,8 @@
+{{#children}}
+	<div style="padding-left:20px">
+	<div class="commentinfo">{{byuser}} {{postedTimePassed}}:</div>
+	<pre class="comment">{{content}}</pre>
+	<a class="reply" href="javascript:void(0)" onclick="return reply(this, {{id}})">reply</a>
+	{{>CommentNode}}
+	</div>
+{{/children}}

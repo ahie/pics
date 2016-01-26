@@ -11,6 +11,7 @@ class Comment
 	public $byuser;
 	public $posted;
 	public $edited;
+	public $children = false;
 
 	public function postedTimePassed() {
                 $diff = time() - strtotime($this->posted);

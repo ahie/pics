@@ -28,7 +28,7 @@ class Comment extends BaseController
 		$content = $this->request->get('text');
 
                 if(trim($content) === '' || strlen($content) > 15000) {
-                        $this->errorResponse(400, 'Comment too long/empty');
+                        $this->errorResponse(400, 'Comment empty / too long');
                         return;
                 }
 
@@ -46,7 +46,7 @@ class Comment extends BaseController
 		$content = $this->request->get('text');
 
 		if(trim($content) === '' || strlen($content) > 15000) {
-			$this->errorResponse(400, 'Comment too long/empty');
+			$this->errorResponse(400, 'Reply empty / too long');
 			return;
 		}
 

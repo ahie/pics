@@ -10,13 +10,15 @@
 		<textarea name="text" maxlength="15000" rows="6" cols="60" id="textinput"></textarea>
 		<input type="submit" value="add comment" disabled id="commentsubmit">
 	</form>
-
 	{{#comments}}
 		<div class="commentinfo">{{byuser}} {{postedTimePassed}}:</div>
 		<pre class="comment">{{content}}</pre>
+		<a class="reply" href="javascript:void(0)" onclick="reply(this, {{id}})">reply</a>
+		{{>CommentNode}}
 	{{/comments}}
 
 </div>
 
 <script src="javascript/commentsubm.js"></script>
+<script src="javascript/reply.js"></script>
 

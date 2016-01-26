@@ -55,7 +55,9 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 		$stmt->setFetchMode(\PDO::FETCH_CLASS, 'Pics\Models\Comment');
 		$comments = $stmt->fetchAll();
 
+		$comments = $this->createCommentTree($comments);
 		$this->m->set('cfp' . $id, $comments, 60);
+
 		return $comments;
 	}
 
@@ -82,5 +84,19 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 
 	}
 
+	private function createCommentTree(array &$comments, $parent = null) {
+		$branch = array();
+		foreach($comments as &$comment) {
+			if($comment->parent === $parent) {
+				$children = $this->createCommentTree($comments, $comment->id);
+				if($children) {
+					$comment->children = $children;
+				}
+				$branch[] = $comment;
+				unset($comment);
+			}
+		}
+		return $branch;
+	}
 }
 
