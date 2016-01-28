@@ -66,7 +66,7 @@ class PSQLCommentRepository implements CommentRepositoryInterface
 			INSERT INTO Comment (content, picture, parent, byuser)
 			VALUES (:content, :picture, :parent, :byuser)
 			RETURNING id');
-		$stmt->bindParam(':content', $comment->content);
+		$stmt->bindParam(':content', utf8_encode($comment->content));
 		$stmt->bindParam(':picture', $comment->picture);
 		$stmt->bindParam(':parent', $comment->parent);
 		$stmt->bindParam(':byuser', $comment->byuser);
