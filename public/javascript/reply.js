@@ -2,6 +2,7 @@ function reply(element, id) {
 	var form = document.createElement('form');
 	form.setAttribute('method', 'post');
 	form.setAttribute('action', '/reply/' + id);
+	form.setAttribute('accept-charset', 'UTF-8');
 
 	var input = document.createElement('textarea');
 	input.setAttribute('name', 'text');

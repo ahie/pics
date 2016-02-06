@@ -6,7 +6,7 @@
 
 	<img src="{{pic.url}}{{pic.id}}" class="pic">
 
-	<form method="post" action="/comment/{{pic.id}}" class="commentform">
+	<form method="post" action="/comment/{{pic.id}}" accept-charset="UTF-8" class="commentform">
 		<textarea name="text" maxlength="15000" rows="6" cols="60" id="textinput"></textarea>
 		<input type="submit" value="add comment" disabled id="commentsubmit">
 	</form>
